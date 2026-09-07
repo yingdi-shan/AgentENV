@@ -103,6 +103,13 @@ corresponding Dockerfile instructions executed during the build. The following f
 | `Volumes` | `VOLUME` | Stored as metadata only |
 | `Labels` | `LABEL` | Stored as metadata only |
 
+Numeric `User` values and explicit user/group pairs are resolved to guest account
+names for envd during startup and resume. A missing numeric account gets an entry
+with the requested UID/GID; existing accounts are preserved. A UID without an
+existing account or an explicit group uses GID 0. Named users and groups must
+exist in the image. Account-file reads are limited to 1 MiB per file, and account
+setup uses the provided BusyBox independently of the image's default user.
+
 ## Manage Templates
 
 ### List templates
