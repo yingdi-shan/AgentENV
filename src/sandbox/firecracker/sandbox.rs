@@ -842,7 +842,10 @@ impl FirecrackerSandbox {
     }
 
     async fn create_guest_directory(envd: &EnvdInstance, path: &str) -> Result<()> {
-        Executor::new(envd.clone()).create_dir_all(path).await
+        Executor::new(envd.clone())
+            .with_root_user()
+            .create_dir_all(path)
+            .await
     }
 
     async fn run_guest_command(
@@ -851,7 +854,14 @@ impl FirecrackerSandbox {
         args: Vec<String>,
     ) -> Result<crate::sandbox::process::ProcessOutput> {
         let args = args.iter().map(String::as_str).collect::<Vec<_>>();
-        Executor::new(envd).run_command(&command, &args).await
+        Executor::new(envd)
+            .with_root_user()
+            .run_command_with_opts(
+                &command,
+                &args,
+                &crate::sandbox::ProcessOpts::default().with_cwd("/"),
+            )
+            .await
     }
 
     async fn sync_writable_volume_filesystems(envd: EnvdInstance) -> Result<()> {

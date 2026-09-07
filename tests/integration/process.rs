@@ -18,6 +18,44 @@ async fn start_sandbox() -> Result<FirecrackerSandbox> {
 }
 
 #[tokio::test]
+async fn numeric_image_users_preserve_identity_after_start_and_resume() -> Result<()> {
+    common::setup().await;
+    for (identity, uid, gid) in [
+        ("0", "0", "0"),
+        ("65534", "65534", "65534"),
+        ("12345", "12345", "0"),
+        ("12345:23456", "12345", "23456"),
+        ("nobody:0", "65534", "0"),
+        ("12345:nogroup", "12345", "65534"),
+    ] {
+        let mut config = common::default_sandbox_config()?;
+        config.vcpu_count = 2;
+        config.mem_size_mib = 512;
+        config.common.default_user = Some(identity.to_owned());
+        config.common.default_workdir = Some("/tmp".to_owned());
+        let mut sandbox = FirecrackerSandbox::new(config)?;
+        sandbox.start().await?;
+        for restored in [false, true] {
+            if restored {
+                sandbox.pause().await?;
+                sandbox.resume().await?;
+            }
+            let output = sandbox
+                .run_command_with_opts(
+                    "/agentenv/bin/busybox",
+                    &["sh", "-c", "id -u; id -g; pwd"],
+                    &ProcessOpts::default().with_timeout(Duration::from_secs(10)),
+                )
+                .await?;
+            assert_eq!(output.exit_code, 0, "{identity}: {}", output.stderr);
+            assert_eq!(output.stdout.trim(), format!("{uid}\n{gid}\n/tmp"));
+        }
+        sandbox.stop().await?;
+    }
+    Ok(())
+}
+
+#[tokio::test]
 async fn run_command_basic_contracts() -> Result<()> {
     common::setup().await;
     tokio::time::timeout(TEST_TIMEOUT, async {
