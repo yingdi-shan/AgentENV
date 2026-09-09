@@ -90,10 +90,6 @@ impl ImageResolver {
         &self.default_image
     }
 
-    #[allow(
-        dead_code,
-        reason = "Used by the node build-session layer of this PR stack"
-    )]
     pub(crate) async fn resolve_buildkit(
         &self,
         content: &super::buildkit::BuildkitContent,

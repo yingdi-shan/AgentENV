@@ -277,10 +277,6 @@ impl TemplateBuildSpec {
         self.ready_cmd.as_deref()
     }
 
-    #[allow(
-        dead_code,
-        reason = "Used by the node build-session layer of this PR stack"
-    )]
     pub(crate) fn with_startup_shell(mut self, shell: &str) -> Self {
         self.startup_shell = Some(shell.to_owned());
         self

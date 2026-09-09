@@ -407,10 +407,6 @@ where
         .await
     }
 
-    #[allow(
-        dead_code,
-        reason = "Used by the node build-session layer of this PR stack"
-    )]
     pub(crate) async fn create_template_builder(
         self: &Arc<Self>,
         build_id: SandboxId,
@@ -865,18 +861,10 @@ where
         Ok(ids.into_iter().collect())
     }
 
-    #[allow(
-        dead_code,
-        reason = "Used by the node build-session layer of this PR stack"
-    )]
     pub(crate) async fn register_template_build(&self, id: SandboxId) {
         self.template_build_ids.write().await.insert(id);
     }
 
-    #[allow(
-        dead_code,
-        reason = "Used by the node build-session layer of this PR stack"
-    )]
     pub(crate) async fn unregister_template_build(&self, id: SandboxId) {
         self.template_build_ids.write().await.remove(&id);
     }

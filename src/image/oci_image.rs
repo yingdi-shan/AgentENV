@@ -506,10 +506,6 @@ trait LayerBlobSource: Send {
     ) -> ImageResult<PathBuf>;
 }
 
-#[allow(
-    dead_code,
-    reason = "Used by the node build-session layer of this PR stack"
-)]
 struct ContentLayerSource<'a> {
     content: &'a BuildkitContent,
     work: &'a Path,
@@ -530,10 +526,6 @@ impl LayerBlobSource for ContentLayerSource<'_> {
     }
 }
 
-#[allow(
-    dead_code,
-    reason = "Used by the node build-session layer of this PR stack"
-)]
 pub(super) async fn fetch_content_manifest(
     content: &BuildkitContent,
     digest: &str,
@@ -593,10 +585,6 @@ pub(super) async fn fetch_content_manifest(
     bail!("builder image index nesting exceeds {MAX_INDEX_RESOLUTION_DEPTH}")
 }
 
-#[allow(
-    dead_code,
-    reason = "Used by the node build-session layer of this PR stack"
-)]
 pub(super) async fn convert_content_image(
     content: &BuildkitContent,
     fetched: &FetchedManifest,
