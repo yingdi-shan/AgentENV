@@ -1,3 +1,8 @@
+#[allow(
+    dead_code,
+    reason = "Used by the node build-session layer of this PR stack"
+)]
+pub(crate) mod buildkit;
 pub(crate) mod cache;
 pub(crate) mod commit_index;
 pub(crate) mod local_layer;
