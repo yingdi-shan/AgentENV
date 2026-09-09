@@ -116,6 +116,7 @@ test: test-agent test-envd test-ublk
 
 test-unit:
 	$(CARGO) test -p agentenv -p envd -p linux-cap --lib
+	$(CARGO) test -p aenv --bin aenv
 	$(CAPABILITY_TEST_ENV) $(CAPABILITY_RUNNER) $(CARGO) test -p agentenv --lib -- --ignored
 	$(CAPABILITY_TEST_ENV) $(CAPABILITY_RUNNER) $(CARGO) test -p uvm-ublk -p uvm-ublk-daemon --lib
 	bash scripts/tests/verify-capability-runner.sh
