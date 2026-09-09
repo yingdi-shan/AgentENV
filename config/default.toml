@@ -350,6 +350,15 @@ concurrency = 4
 # cannot resize it.
 max_inflight_blocks = 16
 
+[template_build]
+# The first Dockerfile build prepares a reusable internal builder template.
+# Each build mounts its own clone of the shared cache seed.
+builder_image = "docker.io/moby/buildkit:v0.33.0"
+builder_cpu_count = 16
+builder_memory_mb = 32768
+# Persistent /var/lib/buildkit disk in MiB (256 GiB). Applies to new caches.
+cache_size_mb = 262144
+
 [observability]
 # Expose node identity, host metrics, and orchestrator runtime metrics.
 enabled = true
